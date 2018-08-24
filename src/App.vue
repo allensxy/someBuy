@@ -6,7 +6,7 @@
                 <div class="head-top">
                     <div class="section">
                         <div class="left-box">
-                            <span>黑马买买买</span>
+                            <span>buy买买买</span>
                             <a target="_blank" href="#"></a>
                             <a target="_blank" href="#"></a>
                         </div>
@@ -38,9 +38,12 @@
                         <div id="menu2" class="nav-box menuhd">
                             <ul>
                                 <li class="index">
-                                    <a href="#" class="">
+                                    <!-- <a href="#" class="">
+                                        <span class="out" style="top: 0px;">123</span>
+                                    </a> -->
+                                    <router-link to="/index" tag="a">
                                         <span class="out" style="top: 0px;">首页</span>
-                                    </a>
+                                    </router-link>
                                 </li>
                                 <li class="news">
                                     <a href="#" class="">
@@ -54,7 +57,7 @@
                                 </li>
                                 <li class="video">
                                     <a href="#" class="">
-                                        <span class="out" style="top: 0px;">黑马超市</span>
+                                        <span class="out" style="top: 0px;">超市</span>
                                     </a>
                                 </li>
                                 <li class="down">
@@ -63,7 +66,7 @@
                                     </a>
                                 </li>
                                 <li class="goods">
-                                    <a href="" class="router-link-exact-active ">
+                                    <a href="" class="">
                                         <span class="out" style="top: 0px;">购物商城</span>
                                     </a>
                                 </li>
@@ -79,6 +82,9 @@
                         </div>
                     </div>
                 </div>
+                <!-- 路由出口 -->
+                <!-- 路由匹配到的组件将渲染在这里 -->
+                <router-view></router-view>
         </div>
         <!-- 底部 -->
         <div class="footer">
@@ -116,18 +122,44 @@
 </template>
 
 <script>
-    import HelloWorld from './components/HelloWorld.vue'
+    // 导入jq
+    import $ from 'jquery';
 
     export default {
-        name: 'app',
-        components: {
-            HelloWorld
-        }
+        // 修改后 devtool 插件的控制台中，会有不同的名字，利于我们查找元素
+        name: 'container',
     }
+    $(document).ready(function() {
+        $("#menu2 li a").wrapInner('<span class="out"></span>');
+        $("#menu2 li a").each(function() {
+            $('<span class="over">' + $(this).text() + '</span>').appendTo(this);
+        });
+
+        $("#menu2 li a").hover(function() {
+            $(".out", this).stop().animate({
+                'top': '48px'
+            }, 300); // move down - hide
+            $(".over", this).stop().animate({
+                'top': '0px'
+            }, 300); // move down - show
+
+        }, function() {
+            $(".out", this).stop().animate({
+                'top': '0px'
+            }, 300); // move up - show
+            $(".over", this).stop().animate({
+                'top': '-48px'
+            }, 300); // move up - hide
+        });
+
+    });
 </script>
 
 <style>
     /* 导入样式 */
     
     @import url('./assets/statics/site/css/style.css');
+    /* 导入 jq 插件样式 */
+    
+    @import url('./assets/lib/css/style.css');
 </style>
