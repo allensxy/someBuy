@@ -13,12 +13,12 @@
                     <div class="left-220" style="margin: 0px;">
                         <div class="banner-nav">
                             <ul>
-                                <li v-for="(item, index) in catelist" :key="item.id">
+                                <li v-for="item in catelist" :key="item.id">
                                     <h3>
                                         <i class="iconfont icon-arrow-right"></i>
                                         <span>{{item.title}}</span>
                                         <p>
-                                            <span v-for="(itemSon, indexSon) in item.subcates" :key="itemSon.id">
+                                            <span v-for="itemSon in item.subcates" :key="itemSon.id">
                                                 {{itemSon.title}}&nbsp;
                                             </span>
                                         </p>
@@ -29,7 +29,7 @@
                                                 <a href="/goods/40.html">{{item.title}}</a>
                                             </dt> 
                                             <dd>
-                                                <a href="/goods/43.html" v-for="(item, index) in catelist" :key="item.id">{{item.title}}</a>
+                                                <a href="/goods/43.html" v-for="item in catelist" :key="item.id">{{item.title}}</a>
                                             </dd>
                                         </dl>
                                     </div>
@@ -43,13 +43,13 @@
                             <div id="focus-box" class="focus-box">
                                 <ul class="slides">
                                     <el-carousel indicator-position="outside">
-                                        <el-carousel-item v-for="(item,index) in sliderlist" :key="item.id">
+                                        <el-carousel-item v-for="item in sliderlist" :key="item.id">
                                             
-                                            <li class="" style="width: 100%;height:100%; float: left; margin-right: -100%; position: relative; opacity: 0; display: block; z-index: 1;"></li>
+                                            <!-- <li class="" style="width: 100%;height:100%; float: left; margin-right: -100%; position: relative; opacity: 0; display: block; z-index: 1;"></li> -->
                                                 <a href="/goods.html">
                                                     <img style="width: 100%;height:100%;" :src="item.img_url" draggable="false"> 
                                                 </a>
-                                            </li>
+                                            <!-- </li> -->
                                             
                                         </el-carousel-item>
                                     </el-carousel>
@@ -98,11 +98,11 @@
                 </div>
             </div>
         </div>
-        <div class="section" v-for="(item, index) in categrouplist" :key="item.level1cateid">
+        <div class="section" v-for="item in categrouplist" :key="item.level1cateid">
             <div class="main-tit">
                 <h2>{{item.catetitle}}</h2>
                 <p>
-                    <a href="/goods/43.html" v-for="(catelist, catelistIndex) in item.level2catelist" :key="catelist.subcateid">{{catelist.subcatetitle}}</a>
+                    <a href="/goods/43.html" v-for="catelist in item.level2catelist" :key="catelist.subcateid">{{catelist.subcatetitle}}</a>
                     <!-- <a href="/goods/43.html">摄影摄像</a> -->
                     <a href="/goods/40.html">更多
                         <i>+</i>
@@ -112,23 +112,26 @@
             <div class="wrapper clearfix">
                 <div class="wrap-box">
                     <ul class="img-list">
-                        <li v-for="(datas, datasIndex) in item.datas" :key="datas.artID">
-                            <a href="#/site/goodsinfo/87" class="">
+                        <li v-for="datas in item.datas" :key="datas.artID">
+                            <router-link :to="'/detail/'+datas.artID">
                                 <div class="img-box">
-                                    <img :src="datas.img_url">
-                                </div>
-                                <div class="info">
-                                    <h3>{{datas.artTitle}}</h3>
-                                    <p class="price">
-                                        <b>{{datas.sell_price}}</b>元</p>
-                                    <p>
-                                        <strong>库存 {{datas.stock_quantity}}</strong>
-                                        <span>市场价：
-                                            <s>{{datas.market_price}}</s>
-                                        </span>
-                                    </p>
-                                </div>
-                            </a>
+                                        <!-- <img :src="datas.img_url"> -->
+                                        <!-- 懒加载的图片指令 -->
+                                        <img v-lazy="datas.img_url">
+                                    </div>
+                                    <div class="info">
+                                        <h3>{{datas.artTitle}}</h3>
+                                        <p class="price">
+                                            <b>{{datas.sell_price}}</b>元</p>
+                                        <p>
+                                            <strong>库存 {{datas.stock_quantity}}</strong>
+                                            <span>市场价：
+                                                <s>{{datas.market_price}}</s>
+                                            </span>
+                                        </p>
+                                    </div>
+                            </router-link>
+                            <!-- <a href="#/site/goodsinfo/87" class=""></a> -->
                         </li>
                         <!-- <li>
                             <a href="#/site/goodsinfo/88" class="">
@@ -497,31 +500,35 @@
         },
         // 生命周期函数
         created() {
+            // 配置API接口地址
+            let root = 'http://47.106.148.205:8899/';
             // 获取商品首页顶部的 轮播图，置顶，分类导航数据
-            axios.get('http://47.106.148.205:8899/site/goods/gettopdata/goods')
+            axios.get(root + 'site/goods/gettopdata/goods')
                 .then((response) => {
                     //console.log(response);
                     this.catelist = response.data.message.catelist;
                     this.sliderlist = response.data.message.sliderlist;
                     this.toplist = response.data.message.toplist;
                     // console.log(this.catelist);
-                }).catch(error => {
-                    console.log(error);
-                });
-            // 商品首页按照分类分组获取数据
-            axios.get('http://47.106.148.205:8899/site/goods/getgoodsgroup')
-                .then((response) => {
-                    console.log(response);
-                    this.categrouplist = response.data.message;
-                }).catch(error => {
-                    console.log(error);
                 })
+                // .catch(error => {
+                //     console.log(error);
+                // });
+                // 商品首页按照分类分组获取数据
+            axios.get(root + 'site/goods/getgoodsgroup')
+                .then((response) => {
+                    // console.log(response);
+                    this.categrouplist = response.data.message;
+                })
+                // .catch(error => {
+                //     console.log(error);
+                // })
         },
-        filters: {
-            formatDate(value) { //格式化时间
-                return moment(value).format("YYYY年MM月DD日");
-            }
-        }
+        // filters: {
+        //     formatDate(value) { //格式化时间
+        //         return moment(value).format("YYYY年MM月DD日");
+        //     }
+        // }
     }
 </script>
 <style>
