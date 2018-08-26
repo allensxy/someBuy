@@ -483,10 +483,6 @@
     </div>
 </template>
 <script>
-    // 导入 axios 包
-    import axios from 'axios';
-    // 导入日期格式化包
-    import moment from 'moment'
     export default {
         name: "index",
         data: function() {
@@ -495,15 +491,14 @@
                 sliderlist: [], //轮播图
                 toplist: [], //排行榜
                 categrouplist: [], //商品分类列表
-                cateTitleArr: []
+                cateTitleArr: [],
+                rootAll: ''
             }
         },
         // 生命周期函数
         created() {
-            // 配置API接口地址
-            let root = 'http://47.106.148.205:8899/';
             // 获取商品首页顶部的 轮播图，置顶，分类导航数据
-            axios.get(root + 'site/goods/gettopdata/goods')
+            this.$axios.get('site/goods/gettopdata/goods')
                 .then((response) => {
                     //console.log(response);
                     this.catelist = response.data.message.catelist;
@@ -515,7 +510,7 @@
                 //     console.log(error);
                 // });
                 // 商品首页按照分类分组获取数据
-            axios.get(root + 'site/goods/getgoodsgroup')
+            this.$axios.get('site/goods/getgoodsgroup')
                 .then((response) => {
                     // console.log(response);
                     this.categrouplist = response.data.message;
