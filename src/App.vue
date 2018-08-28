@@ -23,11 +23,15 @@
                                 <a>退出</a>
                                 <strong>|</strong>
                             </span>
-                            <a href="" class="">
+                            <router-link to="/cart">
+                            <!-- <a href="" class=""> -->
                                 <i class="iconfont icon-cart"></i>购物车(
                                 <span id="shoppingCartCount">
-                                    <span>4</span>
-                                </span>)</a>
+                                    <!-- 通过 $store 获取 Vuex 的数据 -->
+                                    <span>{{$store.getters.goodsCount}}</span>
+                                </span>
+                            <!-- </a> -->
+                            )</router-link>
                         </div>
                     </div>
                 </div>

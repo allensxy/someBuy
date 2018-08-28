@@ -15,7 +15,7 @@
                         <div class="goods-box clearfix">
                             <div class="pic-box">
                                 <!-- 放大镜插件 -->
-                                <!-- <ProductZoomer  /> 怪不得 55个赞
+                                <!-- <ProductZoomer  />
                                     设置使用 images 而这个变量 默认内部是没有数据的
                                     有图片的时候 才生成 才创建
                                  -->
@@ -69,7 +69,7 @@
                                         <dd>
                                             <div id="buyButton" class="btn-buy">
                                                 <button class="buy">立即购买</button>
-                                                <button @click="cartAdd();" class="add">加入购物车</button>
+                                                <button @click="cartAdd" class="add">加入购物车</button>
                                             </div>
                                         </dd>
                                     </dl>
@@ -126,18 +126,6 @@
                                                 <p>{{item.content}}</p>
                                             </div>
                                         </li>
-                                        <!-- <li>
-                                            <div class="avatar-box">
-                                                <i class="iconfont icon-user-full"></i>
-                                            </div>
-                                            <div class="inner-box">
-                                                <div class="info">
-                                                    <span>匿名用户</span>
-                                                    <span>2017/10/23 14:59:36</span>
-                                                </div>
-                                                <p>很清晰调动单很清晰调动单</p>
-                                            </div>
-                                        </li> -->
                                     </ul>
                                     <div class="page-box" style="margin: 5px 0px 0px 62px;">
                                         <Page 
@@ -179,83 +167,6 @@
                                             <span>{{item.add_time | formatDate}}</span>
                                         </div>
                                     </li>
-                                    <!-- <li>
-                                        <div class="img-box">
-                                            <a href="#/site/goodsinfo/91" class="">
-                                                <img src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200214471783.jpg">
-                                            </a>
-                                        </div>
-                                        <div class="txt-box">
-                                            <a href="#/site/goodsinfo/91" class="">尼康(Nikon)D3300套机（18-55mm f/3.5-5.6G VRII）（黑色）</a>
-                                            <span>2015-04-20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="img-box">
-                                            <a href="#/site/goodsinfo/92" class="">
-                                                <img src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200225107390.jpg">
-                                            </a>
-                                        </div>
-                                        <div class="txt-box">
-                                            <a href="#/site/goodsinfo/92" class="">联想（Lenovo） G510AM 15.6英寸笔记本电脑</a>
-                                            <span>2015-04-20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="img-box">
-                                            <a href="#/site/goodsinfo/93" class="">
-                                                <img src="http://39.108.135.214:8899/upload/201504/20/201504200341260763.jpg">
-                                            </a>
-                                        </div>
-                                        <div class="txt-box">
-                                            <a href="#/site/goodsinfo/93" class="">Apple iMac MF883CH/A 21.5英寸一体机电脑</a>
-                                            <span>2015-04-20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="img-box">
-                                            <a href="#/site/goodsinfo/94" class="">
-                                                <img src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200239192345.jpg">
-                                            </a>
-                                        </div>
-                                        <div class="txt-box">
-                                            <a href="#/site/goodsinfo/94" class="">金士顿（Kingston） DataTraveler SE9 32GB 金属U盘</a>
-                                            <span>2015-04-20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="img-box">
-                                            <a href="#/site/goodsinfo/97" class="">
-                                                <img src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200258403759.jpg">
-                                            </a>
-                                        </div>
-                                        <div class="txt-box">
-                                            <a href="#/site/goodsinfo/97" class="">三星（SAMSUNG）UA40HU5920JXXZ 40英寸4K超高清</a>
-                                            <span>2015-04-20</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="img-box">
-                                            <a href="#/site/goodsinfo/102" class="">
-                                                <img src="http://39.108.135.214:8899/imgs/wTgAWDLpQReTQ-ZOMdlAk4vF.jpg">
-                                            </a>
-                                        </div>
-                                        <div class="txt-box">
-                                            <a href="#/site/goodsinfo/102" class="">Hazzys哈吉斯2017新款男士长袖衬衫纯棉修身英伦衬衫显瘦商务衬衣</a>
-                                            <span>2017-09-13</span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="img-box">
-                                            <a href="#/site/goodsinfo/103" class="">
-                                                <img src="http://39.108.135.214:8899/imgs/SJ4EgwosX0wTqvyAvhtFGT1w.jpg">
-                                            </a>
-                                        </div>
-                                        <div class="txt-box">
-                                            <a href="#/site/goodsinfo/103" class="">骆驼男装2017秋季新款运动休闲纯色夹克青年宽松长袖针织开衫卫衣</a>
-                                            <span>2017-09-26</span>
-                                        </div>
-                                    </li> -->
                                 </ul>
                             </div>
                         </div>
@@ -266,7 +177,7 @@
         <!-- ivew 回到顶部 -->
         <BackTop></BackTop>
         <!-- 移动的小图片 -->
-        <img v-if="imglist.length!=0" class="moveImg" :src="imglist[0].original_path" alt="">   
+        <img v-if="imglist.length!=0" class="moveImg" style="display:none" :src="imglist[0].original_path" alt="">   
     </div>
 </template>
 <script>
@@ -370,6 +281,10 @@ export default {
     // 加入购物车的逻辑
     // 使用jq来实现
     cartAdd(){
+        if(this.buyCount ==0){
+            this.$Message.error("数量不能为零，点击加一条数量呗！");
+            return;
+        }
         // 获取加入购物车位置
         let cartOffset = $('.add').offset();
         // console.log(cartOffset);
@@ -377,13 +292,25 @@ export default {
         let targetOffset = $('.icon-cart').offset();
         // 使用动画的方式 移动图片
         // 移动到按钮位置 显示出来 动画移动到目标位置
-        $('.moveImg').show().css(cartOffset).animate(targetOffset,function(){
-            $(this).hide();
+        $('.moveImg').stop().show().addClass('move').css(cartOffset).animate(targetOffset,1000,function(){
+            $(this).hide().removeClass('move');
         });
 
         // 动画完结以后
         // 	隐藏图片
         // 	增加购物车中的显示内容
+
+        // 测试添加数据 通过 this.$store.commit() 方法来调用，里面有两个参数
+        // 参数一：方法的名字
+        // 参数二：自定义修改的数据
+        // this.$store.commit('increment', 10); 
+
+        // 直接修改购物车商品数据---提交载荷（Payload）
+        this.$store.commit('addCart', {
+            productId: this.productId,
+            goodsNum:this.buyCount
+        });
+        
     }
   },
   // 生命周期函数
@@ -393,13 +320,14 @@ export default {
     this.getComments();//评论数据
   },
   watch:{
-      $route(val,oldVal){
-        // 人为让他 强制生成 v-if 数组长度 
-        // 数组长度为0 直接销毁 
-        this.images.normal_size = [];
-        // 重新调用获取数据函数
-        this.getProductDetail();
-      }
+        //   监听路由
+        $route(val,oldVal){
+            // 人为让他 强制生成 v-if 数组长度 
+            // 数组长度为0 直接销毁 
+            this.images.normal_size = [];
+            // 重新调用获取数据函数
+            this.getProductDetail();
+        }
   }
 };
 </script>
@@ -442,12 +370,12 @@ export default {
 .moveImg {
   position: absolute;
   width: 50px;
-  display: block;
+//   display: block;
   // top:0;
   // left:0;
 }
 .moveImg.move{
-    transition: all 1s;
+    transition: transform 1s;
     transform: rotate(720deg);
 }
 </style>
