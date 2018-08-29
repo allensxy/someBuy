@@ -106,8 +106,9 @@
                     <!--购物车底部-->
                     <div class="cart-foot clearfix">
                         <div class="right-box">
-                            <button class="button" onclick="javascript:location.href='/index.html';">继续购物</button>
-                            <button class="submit" onclick="formSubmit(this, '/', '/shopping.html');">立即结算</button>
+                            <router-link to="/index" tag="button" class="button">继续购物</router-link>
+                            <!-- <button class="button" onclick="javascript:location.href='/index.html';">继续购物</button> -->
+                            <button class="submit"  @click="checkAndSubmit" >立即结算</button>
                         </div>
                     </div>
                     <!--购物车底部-->
@@ -131,10 +132,9 @@ export default {
     // console.log(cartDate);
     // 定义拼接的数据
     let ids = "";
-    // 遍历数据，获取购买的数量
+    // 遍历对象数据，获取购买的数量
     for (const key in cartDate) {
-      ids += key;
-      ids += ",";
+      ids += key + ",";
     }
     // console.log(ids);
     // 删除最后一个逗号
@@ -158,43 +158,60 @@ export default {
     // 计算商品总件数
     productCount() {
       let num = 0;
+      // 遍历数组，累加
       this.message.forEach(v => {
-        if (v.selected) {
-          num += v.buycount;
-        }
+        num += parseInt(v.buycount);
       });
       return num;
     },
     // 计算商品总金额
     productPrice() {
       let money = 0;
-      this.message.forEach(v => {
-        if (v.selected) {
-          money += v.buycount * v.sell_price;
-        }
+      this.message.forEach((v, i) => {
+        money += parseInt(v.buycount) * v.sell_price;
       });
       return money;
     }
   },
   methods: {
-    numChange(num,id) {
-        // console.log(num,id);
-        // 调用仓库的方法 (提交载荷)
-        this.$store.commit("updateCart", {
-            productId: id,
-            goodsNum: num
-        });
+    // 更新
+    numChange(num, id) {
+      // 调用仓库的方法 (提交载荷)
+      this.$store.commit("updateCart", {
+        productId: id,
+        goodsNum: num
+      });
     },
-    delOne(id){ 
-        // 提交载荷 这里是删除 Vuex中的
-        this.$store.commit("deteleCart", id);
+    // 删除
+    delOne(id) {
+      // 调用仓库的删除方法 (提交载荷)
+      this.$store.commit("deteleCart", id);
 
-        // 删除本地数组
-        this.message.forEach((v,i)=>{
-            if(v.id == id){
-                this.message.splice(i,1);
+      // 删除当前页码的数组数据
+      this.message.forEach((v, i) => {
+        if (v.id == id) {
+          this.message.splice(i, 1);
+        }
+      });
+    },
+    // 验证去登陆，还是去订单页码
+    checkAndSubmit() {
+        let ids = "";
+        // 遍历数组数据
+        this.message.forEach((v, i) => {
+            if(v.selected){
+                ids += v.id + ",";
             }
-        })
+        });
+        ids = ids.slice(0, -1);
+        // console.log(ids);
+        if (ids == "") {
+            // 一个都没选
+            this.$Message.warning("哥们,你起码选一个呀!!!");
+            return;
+        }
+        // 跳转到订单信息页码
+        this.$router.push(`/order/${ids}`);
     }
   }
 };

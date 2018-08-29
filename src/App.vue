@@ -11,16 +11,18 @@
                             <a target="_blank" href="#"></a>
                         </div>
                         <div id="menu" class="right-box">
-                            <span style="display: none;">
-                                <a href="" class="">登录</a>
+                            <!-- <span style="display: none;"> -->
+                            <span v-show="$store.state.islogin==false">
+                                <!-- <a href="" class="">登录</a> -->
+                                <router-link to="/login">登录</router-link>
                                 <strong>|</strong>
                                 <a href="" class="">注册</a>
                                 <strong>|</strong>
                             </span>
-                            <span>
+                            <span v-show="$store.state.islogin==true">
                                 <a href="" class="">会员中心</a>
                                 <strong>|</strong>
-                                <a>退出</a>
+                                <a @click="outlogin">退出</a>
                                 <strong>|</strong>
                             </span>
                             <router-link to="/cart">
@@ -110,8 +112,8 @@
                 </div>
                 <div class="foot-box">
                     <div class="copyright">
-                        <p>版权所有 黑马买买买 </p>
-                        <p>公司地址： 联系电话：</p>
+                        <p>版权所有 买买买 </p>
+                        <p>公司地址：ccccc 联系电话：12345678</p>
                         <p class="gray">Copyright © 2009-2018 itcast Corporation,All Rights Reserved.</p>
                     </div>
                     <div class="service">
@@ -122,6 +124,20 @@
                 </div>
             </div>
         </div>
+        <!-- 退出的提示层 -->
+        <Modal v-model="isShow" width="360">
+            <p slot="header" style="color:#f60;text-align:center">
+                <Icon type="ios-information-circle"></Icon>
+                <span>确定要退出吗？</span>
+            </p>
+            <div style="text-align:center">
+                <p>退出了，只能重新登录哦！！！</p>
+            </div>
+            <div slot="footer" style="display:flex;justify-content: center">
+                <Button type="success" size="large" @click="sureExit">确定</Button>
+                <Button type="error" size="large" @click="isShow=false">取消</Button>
+            </div>
+        </Modal>
     </div>
 </template>
 
@@ -132,6 +148,33 @@
     export default {
         // 修改后 devtool 插件的控制台中，会有不同的名字，利于我们查找元素
         name: 'container',
+        data(){
+            return{
+                isShow:false
+            }
+        },
+        methods:{
+            // 退出登录操作
+            outlogin(){
+                // 根据模态框的提示 决定是否调用接口
+               this.isShow = true;
+            },
+            sureExit(){
+                // 关闭模态框
+                this.isShow = false;
+                this.$axios.get(`site/account/logout`).then(response=>{
+                    console.log(response);
+                    if(response.data.status == 0){
+                        // 拿到 vuex 里面的 islogin
+                        this.$store.commit('changeLoginStatus',false);
+                        // 登出成功后 默认 回到首页
+                        this.$router.push('/index');
+                    }else if(response.data.status == 1){
+                        this.$Message.error('服务器异常！！！');
+                    }
+                })
+            }
+        }
     }
     $(document).ready(function() {
         $("#menu2 li a").wrapInner('<span class="out"></span>');

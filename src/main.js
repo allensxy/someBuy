@@ -24,6 +24,9 @@ Vue.use(iView);
 
 // 全局导入 axios
 import axios from 'axios';
+//让ajax携带cookie
+// 跨域请求时 是否会携带 凭证(cookie)
+axios.defaults.withCredentials = true;
 // 抽取为全局基地址
 axios.defaults.baseURL = "http://47.106.148.205:8899";
 // 增加到 Vue 的原型中
@@ -47,7 +50,12 @@ Vue.use(ProductZoomer)
 import index from './components/Index';
 // 导入商品详情组件
 import ProductDetail from './components/ProductDetail';
+// 导入购物车组件
 import ShoppingCart from './components/ShoppingCart';
+// 导入订单信息组件
+import Login from './components/Login';
+// 导入订单信息组件
+import PayOrder from './components/PayOrder';
 
 // 定义路由规则
 const routes = [{
@@ -64,10 +72,39 @@ const routes = [{
 }, {
     path: '/cart',
     component: ShoppingCart
+}, {
+    path: '/login',
+    component: Login
+}, {
+    path: '/order/:id',
+    component: PayOrder
 }];
 // 创建 router 实例
 const router = new VueRouter({
     routes
+});
+// 导航守卫（路由守卫）
+router.beforeEach((to, from, next) => {
+    // console.log(to);
+    // console.log(from);
+    // to 是要去什么地方
+    // from 从哪个页面过来
+    store.commit('changeFromPath', from.path);
+    // 如果访问的页面是 order 页面，就判断登录
+    if (to.path.indexOf('/order/') != -1) {
+        // 请求登录接口
+        axios.get(`site/account/islogin`).then(response => {
+            if (response.data.code != "nologin") {
+                // 登录成功后。放行
+                next();
+            } else {
+                next('/login');
+            }
+        });
+    } else {
+        // 否则就放行
+        next();
+    }
 })
 
 // 整合 Vuex 统一进行数据管理
@@ -79,7 +116,10 @@ const store = new Vuex.Store({
     // 这里就是 全局都可以用使用的 数据
     state: {
         // 读取数据，如果没有就是一个空对象
-        cartCount: JSON.parse(window.localStorage.getItem('goodkey')) || {}
+        cartCount: JSON.parse(window.localStorage.getItem('goodkey')) || {},
+        // 判断是否登录
+        islogin: false,
+        fromPath: ""
     },
     // 这个是暴露的修改方法
     mutations: {
@@ -99,15 +139,23 @@ const store = new Vuex.Store({
         },
         // 更新购物车件数的方法
         updateCart(state, goodsInfo) {
-            // 更新操作，直接替换原来的数据
             state.cartCount[goodsInfo.productId] = goodsInfo.goodsNum;
         },
         // 删除购物车的商品
         deteleCart(state, id) {
             // delete 删除的属性不会触发视图更新
             // delete state.cartCount[id];
+
             // 需要调用Vue.delete方法才可以
-            Vue.delete(state.cartCount, id)
+            Vue.delete(state.cartCount, id);
+        },
+        // 判断登录的状态
+        changeLoginStatus(state, islogin) {
+            state.islogin = islogin
+        },
+        // 拿到从哪个地方来的路径
+        changeFromPath(state, fromPath) {
+            state.fromPath = fromPath
         }
     },
     // getters vuex的计算属性
@@ -128,12 +176,22 @@ window.onbeforeunload = function() {
 }
 
 
-
 Vue.config.productionTip = false
 
 new Vue({
     // 通过 render（） 方法，渲染一个叫 APP 的 .vue 组件
     render: h => h(App),
     router,
-    store
+    store,
+    // 最高级别的Vue组件(最外层的那个盒子(祖爷爷))
+    beforeCreate() {
+        axios.get(`site/account/islogin`).then(response => {
+            if (response.data.code == "logined") {
+                // 登录成功，把登录状态改为 true
+                store.state.islogin = true;
+            } else {
+                // 没有登录
+            }
+        });
+    },
 }).$mount('#app')
