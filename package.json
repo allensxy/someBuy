@@ -22,6 +22,7 @@
     "resize-observer-polyfill": "^1.5.0",
     "throttle": "^1.0.3",
     "throttle-debounce": "^2.0.1",
+    "v-distpicker": "^1.0.17",
     "vue": "^2.5.17",
     "vue-router": "^3.0.1"
   },

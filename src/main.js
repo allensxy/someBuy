@@ -1,7 +1,7 @@
 import Vue from 'vue';
 // 路由
 import VueRouter from 'vue-router';
-import App from './App.vue'
+import App from './App.vue';
 
 Vue.use(VueRouter);
 
@@ -40,7 +40,7 @@ Vue.use(VueLazyload, {
     error: require('./assets/img/派大星.gif'),
     loading: require('./assets/img/龙猫.jpg'),
     attempt: 1
-})
+});
 
 // 放大镜插件
 import ProductZoomer from 'vue-product-zoomer'
@@ -55,6 +55,8 @@ import ShoppingCart from './components/ShoppingCart';
 // 导入订单信息组件
 import Login from './components/Login';
 // 导入订单信息组件
+import Order from './components/Order';
+// 导入订单信息组件
 import PayOrder from './components/PayOrder';
 
 // 定义路由规则
@@ -64,21 +66,33 @@ const routes = [{
     redirect: '/index'
         // component: index
 }, {
-    path: '/index',
+    path: '/index', //首页
     component: index
 }, {
-    path: '/detail/:id',
+    path: '/detail/:id', // 商品详情页
     component: ProductDetail
 }, {
-    path: '/cart',
+    path: '/cart', //购物车
     component: ShoppingCart
 }, {
-    path: '/login',
+    path: '/login', //登录
     component: Login
 }, {
-    path: '/order/:id',
-    component: PayOrder
+    path: '/order/:id', //订单页面
+    component: Order,
+    // 路由元信息
+    meta: {
+        isPath: true
+    }
+}, {
+    path: '/payorder/:orderid', //订单详情
+    component: PayOrder,
+    // 路由元信息
+    meta: {
+        isPath: true
+    }
 }];
+
 // 创建 router 实例
 const router = new VueRouter({
     routes
@@ -90,8 +104,12 @@ router.beforeEach((to, from, next) => {
     // to 是要去什么地方
     // from 从哪个页面过来
     store.commit('changeFromPath', from.path);
-    // 如果访问的页面是 order 页面，就判断登录
-    if (to.path.indexOf('/order/') != -1) {
+
+    // 如果访问的页面是 order 页面，就判断登录。这种只能一个一个判断，比较low
+    // if (to.path.indexOf('/order/') != -1) {
+
+    // 使用比较高级的 路由元信息 来实现
+    if (to.meta.isPath == true) {
         // 请求登录接口
         axios.get(`site/account/islogin`).then(response => {
             if (response.data.code != "nologin") {
@@ -108,7 +126,7 @@ router.beforeEach((to, from, next) => {
 })
 
 // 整合 Vuex 统一进行数据管理
-import Vuex from 'vuex'
+import Vuex from 'vuex';
 Vue.use(Vuex);
 // 实例化一个管理数据状态的 仓库，用来保存数据
 // 实例化 vue 的时候 也需要传入 仓库对象
@@ -175,8 +193,7 @@ window.onbeforeunload = function() {
     window.localStorage.setItem('goodkey', JSON.stringify(store.state.cartCount));
 }
 
-
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 new Vue({
     // 通过 render（） 方法，渲染一个叫 APP 的 .vue 组件

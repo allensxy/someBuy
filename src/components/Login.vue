@@ -24,7 +24,7 @@
                     <br>
                     <br>
                     <div class="btn-box">
-                        <input id="btnSubmit" name="btnSubmit" type="submit" @click="login" value="立即登录">
+                        <input id="btnSubmit" name="btnSubmit" type="submit" @click="nowLogin" value="立即登录">
                     </div>
                 </div>
             </div>
@@ -43,7 +43,7 @@ export default {
     },
     methods:{
         // 登录
-        login(){
+        nowLogin(){
             // 进度条
             this.$Loading.config({  //配置信息
                 color: '#5cb85c',
@@ -63,9 +63,13 @@ export default {
                     // console.log("成功！");
                     // 提交载荷 --- 拿到 vuex 里面的方法，传参对 islogin 进行修改
                     this.$store.commit('changeLoginStatus',true);
-                    // 登录成功后回到上一个页面 --- 用编程式的导航
+                    // 登录成功后回到上一个页面 --- 用编程式的导航 - 找到上一个页面的地址
                     // console.log(this.$store.state.fromPath);
-                    this.$router.push(this.$store.state.fromPath);
+                    // this.$router.push(this.$store.state.fromPath);
+
+                    // 方式二：编程式导航中的 go 方法 回到上一个页面
+                    this.$router.go(-1);    // 后退一步记录，等同于 history.back()
+
                 }
                 this.$Loading.finish();
             }).catch(error=>{

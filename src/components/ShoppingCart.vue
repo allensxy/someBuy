@@ -130,6 +130,10 @@ export default {
     // 拿到购物车的数据--- 我们需要的数据格式：id1,id2,id3
     let cartDate = this.$store.state.cartCount;
     // console.log(cartDate);
+    // 判断是否为空对象。空对象表示清空了购物车，就停止后面的代码
+    if(JSON.stringify(cartDate) == "{}"){
+        return;
+    }
     // 定义拼接的数据
     let ids = "";
     // 遍历对象数据，获取购买的数量
@@ -160,7 +164,9 @@ export default {
       let num = 0;
       // 遍历数组，累加
       this.message.forEach(v => {
-        num += parseInt(v.buycount);
+          if(v.selected){
+            num += parseInt(v.buycount);
+          }
       });
       return num;
     },
@@ -168,7 +174,9 @@ export default {
     productPrice() {
       let money = 0;
       this.message.forEach((v, i) => {
-        money += parseInt(v.buycount) * v.sell_price;
+          if(v.selected){
+              money += parseInt(v.buycount) * v.sell_price;
+          }
       });
       return money;
     }
@@ -194,7 +202,8 @@ export default {
         }
       });
     },
-    // 验证去登陆，还是去订单页码
+    // 点击 结算按钮跳转到 订单页面，在这之前如果还没有登录叫跳转到登录页面，
+    // 这一步交给 main.js 中的 路由守卫 去处理
     checkAndSubmit() {
         let ids = "";
         // 遍历数组数据
