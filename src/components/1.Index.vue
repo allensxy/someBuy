@@ -29,7 +29,7 @@
                                                 <a href="/goods/40.html">{{item.title}}</a>
                                             </dt> 
                                             <dd>
-                                                <a href="/goods/43.html" v-for="item in catelist" :key="item.id">{{item.title}}</a>
+                                                <a href="/goods/43.html" v-for="itemSon in item.subcates" :key="itemSon.id">{{itemSon.title}}</a>
                                             </dd>
                                         </dl>
                                     </div>

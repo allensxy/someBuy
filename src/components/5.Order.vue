@@ -112,7 +112,7 @@
                                             <th width="84" align="center">购买数量</th>
                                             <th width="104" align="left">金额(元)</th>
                                         </tr>
-                                        <tr v-for="(item, index) in orderList" :key="item.id">
+                                        <tr v-for="item in orderList" :key="item.id">
                                             <td width="68">
                                                 <a target="_blank" href="/goods/show-89.html">
                                                     <img :src="item.img_url" class="img">
@@ -232,21 +232,21 @@ export default {
             orderForm:{
                 goodsAmount:0,//商品总额
                 expressMoment:20,//快递费
-                accept_name: '张三',//收货人
-                address: '深圳市宝安区',//收货地址
+                accept_name: 'Allen',//收货人
+                address: '灵芝地铁站',//收货地址
                 mobile: '18788888888',//收货人手机号码
                 email: '123@qq.com',//邮箱
                 post_code: '456456',//邮编
                 payment_id:'6',//支付方式
                 express_id:'1',//快递方式
-                message:"",//订单备注信息
+                message:"跳楼大甩卖",//订单备注信息
                 goodsids:1,//购买商品的id
                 cargoodsobj:{},//购买商品对象
                 area:{
-                    "province":{ },
-                    "city":{ },
-                    "area":{ }
-                },
+                    "province":{code: "440000",value:"广东省" },
+                    "city":{code: "440300",value:"深圳市" },
+                    "area":{code: "440306",value:"宝安区"}
+                },// 省市区
                 phone: '6668888',//收货人的联系电话，非必填
             },
             orderList:[],//订单信息
@@ -276,10 +276,11 @@ export default {
         }
     },
     methods:{
-        selected(value){
-            this.orderForm.area.province = value.province.value;
-            this.orderForm.area.city = value.city.value;
-            this.orderForm.area.area = value.area.value;
+        selected(value){    // 选择后的省市区信息
+            this.orderForm.area = value;
+            // this.orderForm.area.province = value.province.value;
+            // this.orderForm.area.city = value.city.value;
+            // this.orderForm.area.area = value.area.value;
         },
         expressChange(price){   //点击快递获取对象的快递费
             this.orderForm.expressMoment = price;
@@ -288,7 +289,7 @@ export default {
             this.$axios.post('site/validate/order/setorder',this.orderForm).then(response=>{
                 // console.log(response);
                 if(response.data.status==0){
-                    // 编程式导航
+                    // 编程式导航 --- 支付中心页面
                     this.$router.push('/payorder/'+response.data.message.orderid);
                     // 删除购物车数据 删除购物车中 提交订单的数据
                     this.orderList.forEach(v=>{
@@ -298,7 +299,6 @@ export default {
                 }
             })
         }
-
     },
     created() { 
         // 直接获取 路由信息里面的 id

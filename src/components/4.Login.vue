@@ -71,6 +71,7 @@ export default {
                     this.$router.go(-1);    // 后退一步记录，等同于 history.back()
 
                 }
+                // 提示完成
                 this.$Loading.finish();
             }).catch(error=>{
                 this.$Loading.error();

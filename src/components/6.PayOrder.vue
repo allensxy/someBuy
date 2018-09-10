@@ -71,10 +71,11 @@
                                 </div>
                                 <div class="el-col el-col-6">
                                     <div id="container2">
-                                        <canvas width="300" height="300"></canvas>
+                                        <qrcode :value="'http://47.106.148.205:8899/site/validate/pay/alipay/'+$route.params.orderid" :options="{ size: 200 }"></qrcode>
                                     </div>
                                 </div>
                             </div>
+                            <input type="button" value="跳转到支付页" @click="goPayOrder">
                         </div>
                     </div>
                 </div>
@@ -84,11 +85,17 @@
 
 </template>
 <script>
+    // 导入 二维码模块
+    import VueQrcode from '@xkeshi/vue-qrcode';
+    // 全局注册
+    // Vue.component(VueQrcode.name, VueQrcode);
     export default {
         name: 'payOrder',
+        
         data() {
             return {
-                orderInfo: {}
+                orderInfo: {},
+                timerId:0
             }
         },
         created() {
@@ -96,7 +103,45 @@
             this.$axios.get(`site/validate/order/getorder/${this.$route.params.orderid}`).then(response => {
                 // console.log(response);
                 this.orderInfo = response.data.message[0];
-            })
+            });
+            // 用定时器的方式 轮询 查询是否支付订单
+            this.timerId = setInterval(()=>{
+                this.$axios.get(`site/validate/order/getorder/${this.$route.params.orderid}`).then(response => {
+                    if(response.data.message[0].status == 2){
+                        // 支付成功
+                        this.$Message.success("付完钱咯,等发货吧!!!(づ￣ 3￣)づ");
+                        setTimeout(() => {
+                            // 跳转到 支付成功页面 并且带上 订单 id
+                            this.$router.push('/paysuccess/'+this.$route.params.orderid);
+                        }, 15000);
+                        // 清除定时器
+                        clearInterval(this.timerId);
+                    }else{
+                        // this.$Message.success("支付失败！");
+                    }
+                });
+            },2000);
+        },
+        components:{
+            // 对象的属性名 默认不支持 使用 对象取值的方式来赋值
+            // ES6中有这个语法
+            [VueQrcode.name]:VueQrcode
+        },
+        // 方法
+        methods: {
+            goPayOrder() {
+            //   直接跳转到这个页面 进行支付 不是用axios调用接口
+            // 直接打开一个新的窗口 完成支付
+            window.open(
+                "http://47.106.148.205:8899/site/validate/pay/alipay/" +
+                this.$route.params.orderid
+            );
+            }
+        },
+        // 钩子函数
+        destroyed() {
+            // 手动清除定时器
+            clearInterval(this.timerId);
         },
     };
 </script>

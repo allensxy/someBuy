@@ -20,7 +20,7 @@
                                 <strong>|</strong>
                             </span>
                             <span v-show="$store.state.islogin==true">
-                                <a href="" class="">会员中心</a>
+                                <router-link to="/vipcenter">会员中心</router-link>
                                 <strong>|</strong>
                                 <a @click="outlogin">退出</a>
                                 <strong>|</strong>
@@ -157,7 +157,7 @@
             // 退出登录操作
             outlogin(){
                 // 根据模态框的提示 决定是否调用接口
-               this.isShow = true;
+                this.isShow = true;
             },
             sureExit(){
                 // 关闭模态框

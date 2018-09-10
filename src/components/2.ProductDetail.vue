@@ -191,7 +191,7 @@ export default {
       hotgoodslist: [], //热卖列表
       imglist: [], //图片列表
       buyCount: "", //购买数量
-      showDiscuss: false,
+      showDiscuss: false,// 是否显示评论 默认为false  默认显示 商品内容,
       zoomerOptions: {
         zoomFactor: 3,
         pane: "pane",
@@ -270,12 +270,14 @@ export default {
             "commenttxt":this.commentInfo
         }).then(response=>{
             // console.log(response);
-            // 提示用户添加成功
-            this.$Message.success(response.data.message);
-            // 局部刷新
-            this.getComments();
-            // 清空评论
-            this.commentInfo = '';
+            if(response.data.status == 0){
+                // 提示用户添加成功
+                this.$Message.success(response.data.message);
+                // 局部刷新
+                this.getComments();
+                // 清空评论
+                this.commentInfo = '';
+            }
         })
     },
     // 加入购物车的逻辑
