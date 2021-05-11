@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "async-validator": "^1.8.5",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "element-ui": "^2.4.6",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.14.0",
