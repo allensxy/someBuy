@@ -17,7 +17,7 @@
     "eslint-plugin-standard": "^3.1.0",
     "iview": "^3.0.1",
     "jquery": "^3.3.1",
-    "moment": "^2.22.2",
+    "moment": "^2.29.2",
     "normalize-wheel": "^1.0.1",
     "resize-observer-polyfill": "^1.5.0",
     "throttle": "^1.0.3",
